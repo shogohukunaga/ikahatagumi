@@ -336,6 +336,65 @@ body{overflow-wrap:anywhere;}
 <!--BLOCK:色_濃--><style>:root{--brown-d:#182552;}</style><!--/BLOCK:色_濃-->
 <!--BLOCK:色_地--><style>:root{--cream:#F2F4F8;}</style><!--/BLOCK:色_地-->
 
+<style id="suzusho-jal-motion">
+.rv,.rv.in{opacity:1;transform:none;transition:none}
+.hero .bg{animation:none;transform:none;scale:var(--jal-hero-scale,1);will-change:scale}
+.hero .wrap{translate:0 var(--jal-hero-y,0px)}
+.hero{isolation:isolate}
+.hero::after{content:"";position:absolute;inset:22px;border:1px solid #f0f3f766;pointer-events:none}
+.split .media{overflow:hidden}
+.split{grid-template-columns:repeat(2,minmax(0,1fr))}
+.strip{grid-template-columns:repeat(var(--motion-work-count,5),minmax(0,1fr))}
+.company .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.company .row{grid-template-columns:120px minmax(0,1fr)}
+.jal-scene-nav{display:none}
+@media(min-width:901px) and (max-width:1200px){
+ .head-cta{display:none}nav.main ul{gap:18px;font-size:12px;white-space:nowrap}.brand{font-size:18px}
+}
+.jal-story .jal-runway{height:calc(var(--jal-stage-height) + var(--jal-travel));position:relative}
+.jal-story .jal-stage{position:sticky;top:calc(var(--jal-header) + 16px);height:var(--jal-stage-height);margin:0 24px;overflow:hidden;background:var(--cream);border:1px solid var(--brown)}
+.jal-story .strip{display:block;position:absolute;inset:0;height:100%}
+.jal-story .strip figure{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .55s ease,visibility .55s;overflow:hidden}
+.jal-story .strip figure.is-current{opacity:1;visibility:visible;pointer-events:auto;z-index:1}
+.jal-story .strip figure .ph{width:100%;height:100%;object-fit:cover;transform:scale(var(--jal-photo-scale,1.06));transition:none}
+.jal-story .strip figure::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#071a2c44,transparent 65%);pointer-events:none}
+.jal-story .strip figcaption{position:absolute;z-index:2;left:5%;bottom:104px;width:min(530px,45%);padding:30px 34px;background:var(--cream);border:0;translate:0 24px;transition:translate .65s cubic-bezier(.22,1,.36,1)}
+.jal-story .strip .is-current figcaption{translate:0 0}
+.jal-story .strip .cat{font-size:13px;color:var(--brown);margin-bottom:18px}
+.jal-story .strip .ttl{font-size:24px;line-height:1.8}
+.jal-story .jal-scene-nav{display:flex;position:absolute;z-index:4;bottom:0;left:0;right:0;padding:18px 5%;gap:14px;align-items:center;background:var(--cream);border-top:1px solid var(--line)}
+.jal-scene-nav button{appearance:none;border:0;border-bottom:2px solid transparent;background:none;color:var(--sub);min-width:44px;min-height:44px;font:inherit;cursor:pointer}
+.jal-scene-nav button[aria-pressed=true]{color:var(--brown);border-bottom-color:var(--brown)}
+.jal-scene-nav button:focus-visible{outline:2px solid var(--brown);outline-offset:3px}
+.jal-scene-hint{margin-left:auto;font-size:11px;color:var(--brown);letter-spacing:.12em}
+.jal-scene-progress{position:absolute;bottom:0;left:0;height:3px;width:100%;background:var(--brown);transform:scaleX(var(--jal-progress,0));transform-origin:left}
+@media(prefers-reduced-motion:no-preference){
+ .hero h1 .line{animation:jal-line-in 1s cubic-bezier(.22,1,.36,1) .15s backwards}
+ .hero h1 .line:nth-child(2){animation-delay:.3s}
+ .hero p.lead{animation:jal-line-in 1s cubic-bezier(.22,1,.36,1) .45s backwards}
+ .btn{transition:background .25s,color .25s,translate .25s}.btn:hover{translate:0 -3px}
+}
+@keyframes jal-line-in{from{clip-path:inset(0 0 100%);translate:0 35px;opacity:0}to{clip-path:inset(0);translate:0 0;opacity:1}}
+@media(max-width:900px){
+ .split,.company .grid{grid-template-columns:minmax(0,1fr)}.strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hero::after{inset:12px}
+ .jal-story .jal-stage{margin:0 12px}
+ .jal-story .strip figure .ph{height:55%}
+ .jal-story .strip figure::after{display:none}
+ .jal-story .strip figcaption{left:0;right:0;bottom:80px;width:100%;padding:18px 22px;background:var(--cream)}
+ .jal-story .strip .ttl{font-size:17px;line-height:1.75}
+ .jal-story .strip .cat{font-size:11px;margin-bottom:10px}
+ .jal-story .jal-scene-nav{padding:10px 12px;gap:4px}
+ .jal-scene-hint{font-size:9px;letter-spacing:0}
+}
+@media(max-width:640px){.strip{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:430px){.jal-scene-hint{display:none}.jal-story .jal-scene-nav{justify-content:space-between}}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+ .hero .bg{scale:1}.hero .wrap{translate:none}
+}
+</style>
+<style id="site-motion-extra">:root{--motion-work-count:5}</style>
 </head>
 <body>
 
@@ -665,24 +724,88 @@ body{overflow-wrap:anywhere;}
   syncBreakpoint();
 })();
 
-/* ===== Scroll reveal（design-spec 9欄: フェードイン＋16pxスライドアップ・stagger 80ms） ===== */
-(function () {
-  var targets = document.querySelectorAll('.rv');
-  if (!targets.length) return;
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (reduce.matches || !('IntersectionObserver' in window)) {
-    targets.forEach(function (el) { el.classList.add('in'); });
-    return;
+
+</script>
+<script id="suzusho-jal-motion-runtime">
+(() => {
+ const root=document.documentElement;
+ if(root.dataset.suzuMotion==='jal-scenes-v1')return;
+ root.dataset.suzuMotion='jal-scenes-v1';root.dataset.siteMotion='jal';
+ const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+ const works=document.querySelector('.works'),strip=works?.querySelector('.strip');
+ const hero=document.querySelector('.hero');
+ if(!strip||!hero)return;
+ const figures=[...strip.querySelectorAll('figure')];
+ const runway=document.createElement('div'),stage=document.createElement('div'),nav=document.createElement('nav');
+ runway.className='jal-runway';stage.className='jal-stage';nav.className='jal-scene-nav';nav.setAttribute('aria-label','施工実績の場面選択');
+ strip.before(runway);runway.append(stage);stage.append(strip,nav);
+ let enabled=false,current=-1,header=76,travel=1,frame=0;
+ const buttons=figures.map((el,i)=>{
+  el.id='jal-work-'+(i+1);
+  const b=document.createElement('button');b.type='button';b.textContent=String(i+1).padStart(2,'0');
+  b.setAttribute('aria-label',el.querySelector('.cat').textContent.trim());b.setAttribute('aria-controls',el.id);
+  b.addEventListener('click',()=>jump(i));
+  b.addEventListener('keydown',e=>{
+   if(e.ctrlKey||e.metaKey||e.altKey)return;
+   let n=i;if(e.key==='ArrowRight')n=(i+1)%figures.length;else if(e.key==='ArrowLeft')n=(i+figures.length-1)%figures.length;else if(e.key==='Home')n=0;else if(e.key==='End')n=figures.length-1;else return;
+   e.preventDefault();jump(n);buttons[n].focus();
+  });nav.append(b);return b;
+ });
+ const hint=document.createElement('span');hint.className='jal-scene-hint';hint.textContent='SCROLL TO EXPLORE';nav.append(hint);
+ const progress=document.createElement('i');progress.className='jal-scene-progress';progress.setAttribute('aria-hidden','true');nav.append(progress);
+ const clamp=(n,a=0,b=1)=>Math.max(a,Math.min(b,n));
+ function select(index){
+  if(current===index)return;current=index;root.dataset.jalScene=String(index+1);
+  figures.forEach((el,i)=>{const on=i===index;el.classList.toggle('is-current',on);el.setAttribute('aria-hidden',String(!on));el.inert=!on;buttons[i].setAttribute('aria-pressed',String(on));buttons[i].tabIndex=on?0:-1});
+ }
+ function jump(index){
+  if(!enabled)return;
+  const y=scrollY+runway.getBoundingClientRect().top-header-16+travel*(index+.15)/figures.length;
+  scrollTo({top:y,behavior:'instant'});render();
+ }
+ function render(){
+  frame=0;if(reduce.matches)return;
+  const hr=hero.getBoundingClientRect(),hp=clamp(-hr.top/Math.max(hr.height,1));
+  hero.style.setProperty('--jal-hero-scale',String(1.04+hp*.1));
+  hero.style.setProperty('--jal-hero-y',(hp*(innerWidth<901?20:60))+'px');
+  if(!enabled)return;
+  const p=clamp((header+16-runway.getBoundingClientRect().top)/travel);
+  const pos=p*figures.length,index=Math.min(figures.length-1,Math.floor(pos));
+  select(index);stage.style.setProperty('--jal-progress',String(p));
+  figures[index].style.setProperty('--jal-photo-scale',String(1.07-clamp(pos-index)*.07));
+ }
+ function schedule(){if(!frame)frame=requestAnimationFrame(render)}
+ function layout(){
+  enabled=!reduce.matches&&innerHeight>=650&&figures.length>1;
+  root.classList.toggle('jal-story',enabled);
+  header=document.querySelector('header.site').getBoundingClientRect().height;
+  const mobile=innerWidth<=900;
+  const height=innerHeight-header-(mobile?84:40);
+  travel=figures.length*innerHeight*.48;
+  root.style.setProperty('--jal-header',header+'px');root.style.setProperty('--jal-stage-height',height+'px');root.style.setProperty('--jal-travel',travel+'px');
+  current=-1;
+  if(!enabled){
+   figures.forEach(el=>{el.removeAttribute('aria-hidden');el.inert=false;el.classList.remove('is-current');el.style.removeProperty('--jal-photo-scale')});
+   hero.style.removeProperty('--jal-hero-scale');hero.style.removeProperty('--jal-hero-y');
   }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry, i) {
-      if (!entry.isIntersecting) return;
-      var el = entry.target;
-      window.setTimeout(function () { el.classList.add('in'); }, i * 80);
-      io.unobserve(el);
-    });
-  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
-  targets.forEach(function (el) { io.observe(el); });
+  render();
+ }
+ addEventListener('scroll',schedule,{passive:true});addEventListener('resize',layout);addEventListener('pageshow',layout);
+ reduce.addEventListener('change',()=>{active.forEach(a=>a.cancel());layout()});
+ const active=new Set();
+ if('IntersectionObserver' in window){
+  const io=new IntersectionObserver(entries=>entries.forEach(e=>{
+   if(!e.isIntersecting)return;io.unobserve(e.target);
+   if(reduce.matches||!e.target.animate)return;
+   const photo=e.target.matches('.media');
+   const a=e.target.animate(photo?[{clipPath:'inset(0 0 100% 0)',scale:1.05},{clipPath:'inset(0)',scale:1}]:[{opacity:0,translate:'0 28px'},{opacity:1,translate:'0 0'}],{duration:photo?1100:850,easing:'cubic-bezier(.22,1,.36,1)',fill:'backwards'});
+   active.add(a);a.onfinish=a.oncancel=()=>active.delete(a);
+  }),{threshold:0,rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.sec-head,.split .media,.split .txt,.philosophy .wrap,.company dl,.ctaband .wrap').forEach(el=>io.observe(el));
+ }
+ document.addEventListener('focusin',()=>active.forEach(a=>a.finish()));
+ addEventListener('pagehide',()=>{active.forEach(a=>a.cancel());cancelAnimationFrame(frame);frame=0});
+ layout();
 })();
 </script>
 </body>
